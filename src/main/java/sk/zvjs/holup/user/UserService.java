@@ -3,9 +3,7 @@ package sk.zvjs.holup.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -17,14 +15,21 @@ public class UserService {
     }
 
     public List<User> fetchAllUsers() {
-        return repository.findAll();
+        List<User> users = new ArrayList<>();
+        repository.findAll().forEach(users::add);
+        return users;
     }
 
-    public Optional<User> fetchUserByUUID(UUID uuid) {
-        return repository.findByUuid(uuid);
+    public Optional<User> fetchUserById(Long id) {
+        return repository.findById(id);
     }
 
     public User createNewUser(User user) {
+//        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         return repository.save(user);
     }
+
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

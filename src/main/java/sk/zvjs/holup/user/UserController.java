@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import sk.zvjs.holup.calendar_event.CalendarEvent;
+import sk.zvjs.holup.calendar_event.CalendarEventService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/user/{id}")
-    public UserResponseDTO fetchUserByUUID(@PathVariable UUID id) {
-        Optional<User> user = userService.fetchUserByUUID(id);
+    public UserResponseDTO fetchUserById(@PathVariable Long id) {
+        Optional<User> user = userService.fetchUserById(id);
         if (user.isPresent()) {
             return new UserResponseDTO(user.get());
         }
@@ -33,7 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/api/v1/user")
-    public UserResponseDTO createUser(@RequestBody User user) {
-        return new UserResponseDTO(userService.createNewUser(user));
+    public User createUser(@RequestBody User user) {
+        return userService.createNewUser(user);
+//        return new UserResponseDTO(user);
     }
 }
