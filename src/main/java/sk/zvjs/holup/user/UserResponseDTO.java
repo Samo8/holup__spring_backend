@@ -10,10 +10,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 public class UserResponseDTO {
-    private Long id;
+    private UUID id;
     private String email;
+    private String apiKey;
 
     public UserResponseDTO(User user) {
-        this(user.getId(), user.getEmail());
+        this(user.getId(), user.getEmail(), user.getApiKey());
     }
 }

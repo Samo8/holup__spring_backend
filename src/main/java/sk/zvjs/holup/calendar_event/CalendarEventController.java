@@ -7,6 +7,8 @@ import org.springframework.web.server.ResponseStatusException;
 import sk.zvjs.holup.user.User;
 import sk.zvjs.holup.user.UserService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 public class CalendarEventController {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     private final UserService userService;
     private final CalendarEventService calendarEventService;
 
@@ -24,7 +27,7 @@ public class CalendarEventController {
     }
 
     @GetMapping("/api/v1/calendar_events/{id}")
-    public List<CalendarEventResponseDTO> fetchCalendarEventsByUserId(@PathVariable Long id) {
+    public List<CalendarEventResponseDTO> fetchCalendarEventsByUserId(@PathVariable UUID id) {
         Optional<User> user = userService.fetchUserById(id);
         if (user.isPresent()) {
             List<CalendarEventResponseDTO> calendarEventResponseDTOS = new ArrayList<>();
@@ -37,10 +40,13 @@ public class CalendarEventController {
     }
 
     @PostMapping("/api/v1/calendar_event/{id}")
-    public CalendarEventResponseDTO addCalendarEvent(@PathVariable Long id, @RequestBody CalendarEventDTO calendarEventDTO) {
+    public CalendarEventResponseDTO addCalendarEvent(@PathVariable UUID id, @RequestBody CalendarEventDTO calendarEventDTO) {
         Optional<User> user = userService.fetchUserById(id);
         if (user.isPresent()) {
-            CalendarEvent calendarEvent = new CalendarEvent(calendarEventDTO);
+            LocalDateTime start = LocalDateTime.parse(calendarEventDTO.getStart(), FORMATTER);
+            LocalDateTime end = LocalDateTime.parse(calendarEventDTO.getEnd(), FORMATTER);
+
+            CalendarEvent calendarEvent = new CalendarEvent(calendarEventDTO, start, end);
             calendarEvent.setUser(user.get());
             CalendarEvent event = calendarEventService.addCalendarEvent(calendarEvent);
             return new CalendarEventResponseDTO(event);

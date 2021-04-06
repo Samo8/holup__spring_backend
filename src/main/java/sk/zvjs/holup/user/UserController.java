@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/user/{id}")
-    public UserResponseDTO fetchUserById(@PathVariable Long id) {
+    public UserResponseDTO fetchUserById(@PathVariable UUID id) {
         Optional<User> user = userService.fetchUserById(id);
         if (user.isPresent()) {
             return new UserResponseDTO(user.get());
@@ -35,7 +35,12 @@ public class UserController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " id not found");
     }
 
-    @PostMapping("/api/v1/user")
+    @PostMapping("/api/v1/auth")
+    public UserResponseDTO auth(@RequestBody AuthDTO authDTO) {
+        return userService.authenticate(authDTO.getEmail(), authDTO.getPassword());
+    }
+
+    @PostMapping("/api/v1/register")
     public User createUser(@RequestBody User user) {
         return userService.createNewUser(user);
 //        return new UserResponseDTO(user);

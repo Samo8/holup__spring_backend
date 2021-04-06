@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,11 +16,12 @@ import java.time.LocalDateTime;
 public class CalendarEventResponseDTO {
     private String title;
     private String description;
-    private Long userId;
+    private UUID userId;
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm", timezone = "UTC")
     private LocalDateTime startTime;
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm", timezone = "UTC")
     private LocalDateTime endTime;
+    private boolean imported;
 
     public CalendarEventResponseDTO(CalendarEvent calendarEvent) {
         this(
@@ -27,7 +29,8 @@ public class CalendarEventResponseDTO {
                 calendarEvent.getDescription(),
                 calendarEvent.getUser().getId(),
                 calendarEvent.getStartTime(),
-                calendarEvent.getEndTime()
+                calendarEvent.getEndTime(),
+                calendarEvent.isImported()
         );
     }
 

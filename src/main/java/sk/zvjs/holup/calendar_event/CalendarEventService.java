@@ -21,7 +21,7 @@ public class CalendarEventService {
     }
 
     public List<CalendarEvent> fetchCalendarEventsByUser(User user) {
-        return calendarEventRepository.findCalendarEventsByUserId(user.getId());
+        return calendarEventRepository.findCalendarEventsByUserIdAndImported(user.getId(), false);
     }
 
     public CalendarEvent addCalendarEvent(CalendarEvent calendarEvent) {
