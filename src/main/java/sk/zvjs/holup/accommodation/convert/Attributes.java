@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.*;
 public class Attributes {
     @lombok.Getter(onMethod_ = {@JsonProperty("FID")})
     @lombok.Setter(onMethod_ = {@JsonProperty("FID")})
-    private long fid;
+    private int fid;
     @lombok.Getter(onMethod_ = {@JsonProperty("N\u00e1zov_pos")})
     @lombok.Setter(onMethod_ = {@JsonProperty("N\u00e1zov_pos")})
     private String nzovPos;

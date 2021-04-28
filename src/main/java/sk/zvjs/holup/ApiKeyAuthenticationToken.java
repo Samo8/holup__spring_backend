@@ -9,7 +9,7 @@ import org.springframework.security.core.Transient;
 @Transient
 public class ApiKeyAuthenticationToken extends AbstractAuthenticationToken {
 
-    private String apiKey;
+    private final String apiKey;
 
     public ApiKeyAuthenticationToken(String apiKey, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);

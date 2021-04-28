@@ -26,7 +26,7 @@ public class AppSecurity extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new ApiKeyAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/v1/register", "/api/v1/auth", "/api/v1/download_accommodations").permitAll()
+                .antMatchers("/api/v1/register", "/api/v1/auth", "/api/v1/download_accommodations", "/api/v1/accommodations").permitAll()
                 .antMatchers("/api/**")
                 .authenticated();
     }

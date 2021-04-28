@@ -1,6 +1,7 @@
 package sk.zvjs.holup.accommodation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sk.zvjs.holup.accommodation.convert.Attributes;
 import sk.zvjs.holup.accommodation.convert.Converter;
@@ -22,26 +23,30 @@ import java.util.List;
 @Service
 public class AccommodationService {
     private static final String ACCOMMODATIONS_URL = "https://services-eu1.arcgis.com/v8rjTx8d1cMu13Tc/ArcGIS/rest/services/poskytovatelia_ubytovania_view/FeatureServer/0/query?where=1%3D1&outFields=*&f=pjson&outSr=4326";
-    private final AccommodationRepository accommodationRepository;
-
     @Autowired
-    public AccommodationService(AccommodationRepository accommodationRepository) {
-        this.accommodationRepository = accommodationRepository;
-    }
+    private AccommodationRepository accommodationRepository;
+    @Value("${google.maps.key}")
+    private String googleMapsKey;
 
     public List<Accommodation> fetchAccommodations(AccommodationDTO accommodationDTO) {
-        List<Accommodation> accommodations =  accommodationRepository.findAllAccommodationsByDTO(
+        var accommodations = accommodationRepository.findAllAccommodationsByDTO(
                 accommodationDTO.getType(),
                 accommodationDTO.getAge(),
                 accommodationDTO.getGender(),
                 accommodationDTO.getRegion()
         );
-        Double inputDistance = accommodationDTO.getDistance();
-        Location usersLocation = accommodationDTO.getLocation();
+        var inputDistance = accommodationDTO.getDistance();
+        var usersLocation = accommodationDTO.getLocation();
         if (inputDistance != null && usersLocation != null) {
             List<Accommodation> accommodationsByLocation = new ArrayList<>();
-            for (Accommodation accommodation : accommodations) {
-                double accommodationDistance = distance(accommodation.getLat(), usersLocation.getLat(), accommodation.getLon(), usersLocation.getLng());
+            for (var accommodation : accommodations) {
+                var location = accommodation.getLocation();
+                var accommodationDistance = distance(
+                        location.getLat(),
+                        usersLocation.getLat(),
+                        location.getLon(),
+                        usersLocation.getLng()
+                );
                 if (accommodationDistance <= inputDistance)
                     accommodationsByLocation.add(accommodation);
             }
@@ -54,13 +59,13 @@ public class AccommodationService {
     public static double distance(double lat1, double lat2, double lon1, double lon2) {
         final int R = 6371;
 
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+        var latDistance = Math.toRadians(lat2 - lat1);
+        var lonDistance = Math.toRadians(lon2 - lon1);
+        var a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = R * c;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = R * c;
 
         distance = Math.pow(distance, 2);
 
@@ -68,66 +73,66 @@ public class AccommodationService {
     }
 
     public void saveAccommodationsToDatabase() throws IOException {
-        String accommodationsString = fetchDataFromAPI(ACCOMMODATIONS_URL);
-        Welcome welcome = Converter.fromJsonString(accommodationsString);
+        var accommodationsString = fetchDataFromAPI(ACCOMMODATIONS_URL);
+        var welcome = Converter.fromJsonString(accommodationsString);
 
         List<Accommodation> accommodations = new ArrayList<>();
         for (var feature : welcome.getFeatures()) {
-            Attributes attributes =  feature.getAttributes();
-            Accommodation accommodation = createAccommodationAndAddLocationParams(attributes);
+            var attributes =  feature.getAttributes();
+            var accommodation = createAccommodationAndAddLocationParams(attributes);
             accommodations.add(accommodation);
         }
         accommodationRepository.saveAll(accommodations);
     }
 
     private Accommodation createAccommodationAndAddLocationParams(Attributes attributes) throws IOException {
-        String mapsURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + attributes.getLat() + "," + attributes.getLon() + "&key=AIzaSyA6hfZIEa1zt-jg0fSIV3Htb_8whuRwK2s";
-        String addressJson = fetchDataFromAPI(mapsURL);
-        Address address = ConvertAddress.fromJsonString(addressJson);
+        var mapsURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + attributes.getLat() + "," + attributes.getLon() + "&key=" + googleMapsKey;
+        var addressJson = fetchDataFromAPI(mapsURL);
+        var address = ConvertAddress.fromJsonString(addressJson);
 
-        String region = "";
-        String district = "";
-        String street = "";
-        String postCode = "";
+        var region = "";
+        var district = "";
+        var city = "";
+        var street = "";
+        var postCode = "";
 
         var result= address.getResults()[0];
 
-        for (AddressComponent addressComponent : result.getAddressComponents()) {
-            String[] addressTypesFromApi = addressComponent.getTypes();
+        for (var addressComponent : result.getAddressComponents()) {
+            var addressTypesFromApi = addressComponent.getTypes();
             List<String> addressTypes = new ArrayList<>(Arrays.asList(addressTypesFromApi));
             if (addressTypes.contains("route")) {
                 street = addressComponent.getLongName();
             } else if (addressTypes.contains("postal_code")) {
                 postCode = addressComponent.getLongName();
+            } else if (addressTypes.contains("sublocality") || addressTypes.contains("locality")) {
+                city = addressComponent.getLongName();
             } else if (addressTypes.contains("administrative_area_level_1")) {
                 region = addressComponent.getLongName();
+            } else if (addressTypes.contains("administrative_area_level_2")) {
+                district = addressComponent.getLongName();
             }
         }
 
         return Accommodation.builder()
                 .id(attributes.getFid())
                 .name(attributes.getNzovZar())
-                .address(attributes.getAdresaZar())
                 .phoneNumber(attributes.getTelefonick())
                 .email(attributes.getEMail())
                 .webPage(attributes.getWebovLo())
                 .gender(attributes.getPohlavie())
                 .age(attributes.getVek())
                 .type(attributes.getTypSlub())
-                .lat(attributes.getLat())
-                .lon(attributes.getLon())
-                .region(region)
-                .district(district)
-                .street(street)
-                .postCode(postCode)
+                .location(new AccommodationLocation(attributes.getLat(), attributes.getLon()))
+                .address(new AccommodationAddress(region, district, city, street, postCode))
                 .build();
     }
 
     private String fetchDataFromAPI(String targetURL) throws IOException {
-        StringBuilder result = new StringBuilder();
-        URL url = new URL(targetURL);
+        var result = new StringBuilder();
+        var url = new URL(targetURL);
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        var conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         try (var reader = new BufferedReader(
                 new InputStreamReader(conn.getInputStream()))) {

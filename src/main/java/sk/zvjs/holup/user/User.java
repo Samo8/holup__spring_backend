@@ -27,11 +27,16 @@ public class User {
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference
     private Set<CalendarEvent> calendarEvents = new HashSet<>();
     private String apiKey;
 
     public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(UUID id, String email, String password) {
+        this.id = id;
         this.email = email;
         this.password = password;
     }

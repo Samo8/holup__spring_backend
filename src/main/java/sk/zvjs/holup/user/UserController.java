@@ -22,8 +22,12 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/users")
-    public List<User> fetchAllUsers() {
-        return userService.fetchAllUsers();
+    public List<UserResponseDTO> fetchAllUsers() {
+        List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
+        for (var user : userService.fetchAllUsers()) {
+            userResponseDTOS.add(new UserResponseDTO(user));
+        }
+        return userResponseDTOS;
     }
 
     @GetMapping("/api/v1/user/{id}")

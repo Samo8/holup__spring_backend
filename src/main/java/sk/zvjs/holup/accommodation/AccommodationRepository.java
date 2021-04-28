@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccommodationRepository extends CrudRepository<Accommodation, Long> {
+public interface AccommodationRepository extends CrudRepository<Accommodation, Integer> {
     @Query(
             value = "SELECT * FROM Accommodation " +
             " WHERE (:type IS NULL OR type IN (:type))" +
@@ -17,12 +17,12 @@ public interface AccommodationRepository extends CrudRepository<Accommodation, L
             " AND " +
             " (:gender IS NULL OR gender = cast(:gender AS text)) " +
             " AND " +
-            " (:region IS NULL OR region = cast(:region AS text)) ", nativeQuery = true
+            " (:region IS NULL OR region IN (:region))", nativeQuery = true
     )
     List<Accommodation> findAllAccommodationsByDTO(
             @Param("type") List<String> type,
             @Param("age") String age,
             @Param("gender") String gender,
-            @Param("region") String region
+            @Param("region") List<String> region
     );
 }

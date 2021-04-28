@@ -15,7 +15,7 @@ public class AccommodationDTO {
     private List<String> type = new ArrayList<>();
     private String age;
     private String gender;
-    private String region;
+    private List<String> region = new ArrayList<>();
     private Double distance;
     private Location location;
 }

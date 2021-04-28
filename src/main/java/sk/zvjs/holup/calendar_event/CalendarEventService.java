@@ -27,4 +27,19 @@ public class CalendarEventService {
     public CalendarEvent addCalendarEvent(CalendarEvent calendarEvent) {
         return calendarEventRepository.save(calendarEvent);
     }
+
+    public CalendarEvent updateCalendarEventImport(Long id) {
+        var calendarEvent = calendarEventRepository.findById(id);
+        if (calendarEvent.isPresent()) {
+            calendarEvent.get().setImported(true);
+            calendarEventRepository.save(calendarEvent.get());
+            return calendarEvent.get();
+        }
+        return null;
+    }
+
+    public void deleteCalendarEvent(Long id) {
+        var calendarEvent = calendarEventRepository.findById(id);
+        calendarEvent.ifPresent(calendarEventRepository::delete);
+    }
 }
