@@ -1,10 +1,9 @@
 package sk.zvjs.holup.accommodation;
 
 import lombok.*;
-import sk.zvjs.holup.address.Location;
+import sk.zvjs.holup.address.convert.Location;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,10 +11,11 @@ import java.util.List;
 @Setter
 @ToString
 public class AccommodationDTO {
-    private List<String> type = new ArrayList<>();
-    private String age;
+    private Set<String> types;
+    private Set<String> ages;
     private String gender;
-    private List<String> region = new ArrayList<>();
+    private Set<String> regions;
+    private Set<String> districts;
     private Double distance;
     private Location location;
 }

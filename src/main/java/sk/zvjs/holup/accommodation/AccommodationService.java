@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sk.zvjs.holup.accommodation.convert.Attributes;
 import sk.zvjs.holup.accommodation.convert.Converter;
-import sk.zvjs.holup.accommodation.convert.Welcome;
-import sk.zvjs.holup.address.Address;
-import sk.zvjs.holup.address.AddressComponent;
-import sk.zvjs.holup.address.ConvertAddress;
-import sk.zvjs.holup.address.Location;
+import sk.zvjs.holup.address.convert.ConvertAddress;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,12 +25,16 @@ public class AccommodationService {
     private String googleMapsKey;
 
     public List<Accommodation> fetchAccommodations(AccommodationDTO accommodationDTO) {
-        var accommodations = accommodationRepository.findAllAccommodationsByDTO(
-                accommodationDTO.getType(),
-                accommodationDTO.getAge(),
+        System.out.println(accommodationDTO.getTypes());
+
+        var accommodations = accommodationRepository.findAccommodationsByAllParams(
+                accommodationDTO.getTypes(),
                 accommodationDTO.getGender(),
-                accommodationDTO.getRegion()
+                accommodationDTO.getRegions(),
+                accommodationDTO.getDistricts(),
+                accommodationDTO.getAges()
         );
+
         var inputDistance = accommodationDTO.getDistance();
         var usersLocation = accommodationDTO.getLocation();
         if (inputDistance != null && usersLocation != null) {
@@ -53,7 +53,6 @@ public class AccommodationService {
             return accommodationsByLocation;
         }
         return accommodations;
-
     }
 
     public static double distance(double lat1, double lat2, double lon1, double lon2) {
@@ -114,7 +113,7 @@ public class AccommodationService {
             }
         }
 
-        return Accommodation.builder()
+        Accommodation accommodation = Accommodation.builder()
                 .id(attributes.getFid())
                 .name(attributes.getNzovZar())
                 .phoneNumber(attributes.getTelefonick())
@@ -126,6 +125,8 @@ public class AccommodationService {
                 .location(new AccommodationLocation(attributes.getLat(), attributes.getLon()))
                 .address(new AccommodationAddress(region, district, city, street, postCode))
                 .build();
+        System.out.println(accommodation.toString());
+        return accommodation;
     }
 
     private String fetchDataFromAPI(String targetURL) throws IOException {

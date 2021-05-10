@@ -16,13 +16,13 @@ public class ReleaseController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/release/{userId}")
-    public Release fetchUsersRelease(@PathVariable UUID userId) {
+    @GetMapping("/api/v1/release/{userId}")
+    public ReleaseDTO fetchUsersRelease(@PathVariable UUID userId) {
         var user = userService.fetchUserById(userId);
         if (user.isPresent()) {
             var release =  releaseService.fetchReleaseByUserId(userId);
             if (release.isPresent()) {
-                return release.get();
+                return new ReleaseDTO(release.get());
             }
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No release date for user with " + userId + " id was found");
         }

@@ -3,7 +3,7 @@ package sk.zvjs.holup.accommodation.convert;
 import com.fasterxml.jackson.annotation.*;
 
 @lombok.Data
-public class Welcome {
+public class AccommodationData {
     @lombok.Getter(onMethod_ = {@JsonProperty("objectIdFieldName")})
     @lombok.Setter(onMethod_ = {@JsonProperty("objectIdFieldName")})
     private String objectIDFieldName;

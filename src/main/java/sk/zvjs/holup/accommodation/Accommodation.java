@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Setter
+@ToString
 public class Accommodation {
     @Id
     private Integer id;

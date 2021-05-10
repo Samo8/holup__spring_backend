@@ -14,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class CalendarEventResponseDTO {
+    private Long id;
     private String title;
     private String description;
     private UUID userId;
@@ -25,6 +26,7 @@ public class CalendarEventResponseDTO {
 
     public CalendarEventResponseDTO(CalendarEvent calendarEvent) {
         this(
+                calendarEvent.getId(),
                 calendarEvent.getTitle(),
                 calendarEvent.getDescription(),
                 calendarEvent.getUser().getId(),

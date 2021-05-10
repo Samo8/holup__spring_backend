@@ -7,6 +7,7 @@ import lombok.Setter;
 import sk.zvjs.holup.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,12 +22,10 @@ public class Release {
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     private User user;
-    private LocalDateTime releaseDate;
-    private boolean imported;
+    private LocalDate releaseDate;
 
-    public Release(User user, LocalDateTime releaseDate, boolean imported) {
+    public Release(User user, LocalDate releaseDate) {
         this.user = user;
         this.releaseDate = releaseDate;
-        this.imported = imported;
     }
 }

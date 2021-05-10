@@ -2,17 +2,18 @@ package sk.zvjs.holup.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import sk.zvjs.holup.calendar_event.CalendarEvent;
-import sk.zvjs.holup.calendar_event.CalendarEventService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -45,8 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/api/v1/register")
-    public User createUser(@RequestBody User user) {
-        return userService.createNewUser(user);
-//        return new UserResponseDTO(user);
+    public UserResponseDTO createUser(@Valid @RequestBody AuthDTO auth) {
+        User user = auth.toUser();
+        return new UserResponseDTO(userService.createNewUser(user));
     }
 }

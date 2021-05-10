@@ -1,10 +1,12 @@
-package sk.zvjs.holup.address;
+package sk.zvjs.holup.address.convert;
 
 import java.io.IOException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import sk.zvjs.holup.address.Address;
+
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneOffset;

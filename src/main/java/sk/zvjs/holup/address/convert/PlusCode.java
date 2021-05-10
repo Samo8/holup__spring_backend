@@ -1,4 +1,4 @@
-package sk.zvjs.holup.address;
+package sk.zvjs.holup.address.convert;
 
 import com.fasterxml.jackson.annotation.*;
 

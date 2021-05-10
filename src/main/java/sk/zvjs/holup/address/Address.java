@@ -2,6 +2,9 @@ package sk.zvjs.holup.address;
 
 
 import com.fasterxml.jackson.annotation.*;
+import sk.zvjs.holup.address.convert.PlusCode;
+import sk.zvjs.holup.address.convert.Result;
+
 @lombok.Data
 public class Address {
     @lombok.Getter(onMethod_ = {@JsonProperty("plus_code")})
