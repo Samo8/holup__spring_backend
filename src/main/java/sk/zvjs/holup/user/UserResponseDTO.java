@@ -11,10 +11,10 @@ import java.util.UUID;
 @Getter
 public class UserResponseDTO {
     private UUID id;
-    private String email;
+    private Long convictedNumber;
     private String apiKey;
 
     public UserResponseDTO(User user) {
-        this(user.getId(), user.getEmail(), user.getApiKey());
+        this(user.getId(), user.getConvictedNumber(), user.getApiKey());
     }
 }

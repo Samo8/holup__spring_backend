@@ -15,13 +15,12 @@ import javax.validation.constraints.Size;
 @Setter
 public class AuthDTO {
     @NotNull
-    @NotEmpty(message = "Email nesmie byť prázdny")
-    private String email;
+    private Long convictedNumber;
     @NotNull
     @Size(min = 6, message = "Heslo musí mať aspoň 6 znakov")
     private String password;
 
     User toUser() {
-        return new User(this.email, this.password);
+        return new User(this.convictedNumber, this.password);
     }
 }

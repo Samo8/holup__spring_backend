@@ -1,8 +1,5 @@
 package sk.zvjs.holup;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +8,6 @@ import sk.zvjs.holup.user.*;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +35,7 @@ public class UserTests {
 
     @Test
     public void findUserByEmail() {
-        Optional<User> user = userService.findByEmail("test@test.com");
+        Optional<User> user = userService.findByConvictedNumber(1000L);
         assertNotNull(user.get());
         assertTrue(passwordEncoder.matches("heslo", user.get().getPassword()));
     }

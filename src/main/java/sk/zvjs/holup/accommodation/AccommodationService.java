@@ -77,7 +77,7 @@ public class AccommodationService {
 
         List<Accommodation> accommodations = new ArrayList<>();
         for (var feature : welcome.getFeatures()) {
-            var attributes =  feature.getAttributes();
+            var attributes = feature.getAttributes();
             var accommodation = createAccommodationAndAddLocationParams(attributes);
             accommodations.add(accommodation);
         }
@@ -95,7 +95,7 @@ public class AccommodationService {
         var street = "";
         var postCode = "";
 
-        var result= address.getResults()[0];
+        var result = address.getResults()[0];
 
         for (var addressComponent : result.getAddressComponents()) {
             var addressTypesFromApi = addressComponent.getTypes();

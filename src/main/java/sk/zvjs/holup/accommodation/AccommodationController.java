@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
 @RestController
 public class AccommodationController {
     private final AccommodationService accommodationService;
@@ -26,6 +25,7 @@ public class AccommodationController {
             accommodationService.saveAccommodationsToDatabase();
             return "Success";
         } catch (Exception e) {
+            System.out.println(e.toString());
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, "Something went wrong");
         }
     }

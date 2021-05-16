@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sk.zvjs.holup.user.UserService;
+
 import java.util.UUID;
 
 @RestController
@@ -20,7 +21,7 @@ public class ReleaseController {
     public ReleaseDTO fetchUsersRelease(@PathVariable UUID userId) {
         var user = userService.fetchUserById(userId);
         if (user.isPresent()) {
-            var release =  releaseService.fetchReleaseByUserId(userId);
+            var release = releaseService.fetchReleaseByUserId(userId);
             if (release.isPresent()) {
                 return new ReleaseDTO(release.get());
             }

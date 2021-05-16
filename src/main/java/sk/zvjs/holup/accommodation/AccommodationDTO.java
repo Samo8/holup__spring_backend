@@ -1,7 +1,7 @@
 package sk.zvjs.holup.accommodation;
 
 import lombok.*;
-import sk.zvjs.holup.address.convert.Location;
+import sk.zvjs.holup.address.Location;
 
 import java.util.Set;
 

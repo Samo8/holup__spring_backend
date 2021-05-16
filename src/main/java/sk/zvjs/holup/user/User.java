@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 import sk.zvjs.holup.calendar_event.CalendarEvent;
 
 import javax.persistence.*;
@@ -22,22 +21,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Column(unique = true, nullable = false, length = 32)
-    private String email;
+    @Column(unique = true, nullable = false)
+    private Long convictedNumber;
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CalendarEvent> calendarEvents = new HashSet<>();
     private String apiKey;
 
-    public User(String email, String password) {
-        this.email = email;
+    public User(Long convictedNumber, String password) {
+        this.convictedNumber = convictedNumber;
         this.password = password;
     }
 
-    public User(UUID id, String email, String password) {
+    public User(UUID id, Long convictedNumber, String password) {
         this.id = id;
-        this.email = email;
+        this.convictedNumber = convictedNumber;
         this.password = password;
     }
 

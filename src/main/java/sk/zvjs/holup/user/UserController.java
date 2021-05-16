@@ -42,7 +42,7 @@ public class UserController {
 
     @PostMapping("/api/v1/auth")
     public UserResponseDTO auth(@RequestBody AuthDTO authDTO) {
-        return userService.authenticate(authDTO.getEmail(), authDTO.getPassword());
+        return userService.authenticate(authDTO.getConvictedNumber(), authDTO.getPassword());
     }
 
     @PostMapping("/api/v1/register")

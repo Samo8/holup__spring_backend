@@ -3,6 +3,7 @@ package sk.zvjs.holup.address.convert;
 import com.fasterxml.jackson.annotation.*;
 
 @lombok.Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressComponent {
     @lombok.Getter(onMethod_ = {@JsonProperty("long_name")})
     @lombok.Setter(onMethod_ = {@JsonProperty("long_name")})
