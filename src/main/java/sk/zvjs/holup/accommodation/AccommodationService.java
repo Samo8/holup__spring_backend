@@ -31,8 +31,7 @@ public class AccommodationService {
                 accommodationDTO.getTypes(),
                 accommodationDTO.getGender(),
                 accommodationDTO.getRegions(),
-                accommodationDTO.getDistricts(),
-                accommodationDTO.getAges()
+                accommodationDTO.getDistricts()
         );
 
         var inputDistance = accommodationDTO.getDistance();

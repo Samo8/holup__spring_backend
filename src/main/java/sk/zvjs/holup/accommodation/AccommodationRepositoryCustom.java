@@ -8,7 +8,6 @@ public interface AccommodationRepositoryCustom {
             Set<String> types,
             String gender,
             Set<String> regions,
-            Set<String> districts,
-            Set<String> ages
+            Set<String> districts
     );
 }

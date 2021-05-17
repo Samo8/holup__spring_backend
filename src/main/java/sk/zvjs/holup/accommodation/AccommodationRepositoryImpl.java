@@ -12,7 +12,7 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
     private EntityManager entityManager;
 
     @Override
-    public List<Accommodation> findAccommodationsByAllParams(Set<String> types, String gender, Set<String> regions, Set<String> districts, Set<String> ages) {
+    public List<Accommodation> findAccommodationsByAllParams(Set<String> types, String gender, Set<String> regions, Set<String> districts) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Accommodation> query = cb.createQuery(Accommodation.class);
         Root<Accommodation> accommodation = query.from(Accommodation.class);

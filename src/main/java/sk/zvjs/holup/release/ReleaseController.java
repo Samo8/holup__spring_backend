@@ -44,7 +44,7 @@ public class ReleaseController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + userId + " id not found");
     }
 
-    @PatchMapping("/api/v1/release/{userId}")
+    @PutMapping("/api/v1/release/{userId}")
     public ReleaseDTO updateReleaseByUserId(@PathVariable UUID userId, @RequestBody ObjectNode jsonNodes) {
         var releaseDate = jsonNodes.get("releaseDate").asText();
         if (releaseDate != null) {

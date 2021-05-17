@@ -12,7 +12,6 @@ import java.util.Set;
 @ToString
 public class AccommodationDTO {
     private Set<String> types;
-    private Set<String> ages;
     private String gender;
     private Set<String> regions;
     private Set<String> districts;

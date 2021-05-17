@@ -53,7 +53,7 @@ public class CalendarEventController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " id not found");
     }
 
-    @PatchMapping("/api/v1/calendar_event/{id}")
+    @PutMapping("/api/v1/calendar_event/{id}")
     public CalendarEventResponseDTO updateCalendarEvent(@PathVariable Long id) {
         var calendarEvent = calendarEventService.updateCalendarEventImport(id);
         if (calendarEvent != null) {
