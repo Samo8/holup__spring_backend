@@ -26,6 +26,7 @@ public class Accommodation {
     private String age;
     @Column(length = 64)
     private String type;
+    private String price;
     @Embedded
     private AccommodationLocation location;
     @Embedded

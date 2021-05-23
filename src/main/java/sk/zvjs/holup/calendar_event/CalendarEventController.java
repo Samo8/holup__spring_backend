@@ -1,6 +1,5 @@
 package sk.zvjs.holup.calendar_event;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class CalendarEventController {
     private final UserService userService;
     private final CalendarEventService calendarEventService;
 
-    @Autowired
     public CalendarEventController(UserService userService, CalendarEventService calendarEventService) {
         this.userService = userService;
         this.calendarEventService = calendarEventService;

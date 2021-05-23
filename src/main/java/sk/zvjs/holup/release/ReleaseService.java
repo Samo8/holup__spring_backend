@@ -1,11 +1,9 @@
 package sk.zvjs.holup.release;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sk.zvjs.holup.user.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,8 +12,11 @@ import java.util.UUID;
 public class ReleaseService {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    @Autowired
-    private ReleaseRepository releaseRepository;
+    private final ReleaseRepository releaseRepository;
+
+    public ReleaseService(ReleaseRepository releaseRepository) {
+        this.releaseRepository = releaseRepository;
+    }
 
     public Optional<Release> fetchReleaseByUserId(UUID uuid) {
         return releaseRepository.findReleaseByUserId(uuid);

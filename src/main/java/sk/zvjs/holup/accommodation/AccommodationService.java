@@ -1,6 +1,5 @@
 package sk.zvjs.holup.accommodation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sk.zvjs.holup.accommodation.convert.Attributes;
@@ -19,14 +18,16 @@ import java.util.List;
 @Service
 public class AccommodationService {
     private static final String ACCOMMODATIONS_URL = "https://services-eu1.arcgis.com/v8rjTx8d1cMu13Tc/ArcGIS/rest/services/poskytovatelia_ubytovania_view/FeatureServer/0/query?where=1%3D1&outFields=*&f=pjson&outSr=4326";
-    @Autowired
-    private AccommodationRepository accommodationRepository;
+
+    private final AccommodationRepository accommodationRepository;
     @Value("${google.maps.key}")
     private String googleMapsKey;
 
-    public List<Accommodation> fetchAccommodations(AccommodationDTO accommodationDTO) {
-        System.out.println(accommodationDTO.getTypes());
+    public AccommodationService(AccommodationRepository accommodationRepository) {
+        this.accommodationRepository = accommodationRepository;
+    }
 
+    public List<Accommodation> fetchAccommodations(AccommodationDTO accommodationDTO) {
         var accommodations = accommodationRepository.findAccommodationsByAllParams(
                 accommodationDTO.getTypes(),
                 accommodationDTO.getGender(),
@@ -111,8 +112,7 @@ public class AccommodationService {
                 district = addressComponent.getLongName();
             }
         }
-
-        Accommodation accommodation = Accommodation.builder()
+        return Accommodation.builder()
                 .id(attributes.getFid())
                 .name(attributes.getNzovZar())
                 .phoneNumber(attributes.getTelefonick())
@@ -121,11 +121,10 @@ public class AccommodationService {
                 .gender(attributes.getPohlavie())
                 .age(attributes.getVek())
                 .type(attributes.getTypSlub())
+                .price(attributes.getVka())
                 .location(new AccommodationLocation(attributes.getLat(), attributes.getLon()))
                 .address(new AccommodationAddress(region, district, city, street, postCode))
                 .build();
-        System.out.println(accommodation.toString());
-        return accommodation;
     }
 
     private String fetchDataFromAPI(String targetURL) throws IOException {

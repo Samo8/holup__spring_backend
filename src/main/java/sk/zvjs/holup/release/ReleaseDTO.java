@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 public class ReleaseDTO {
     private UUID uuid;
-    @JsonFormat(pattern = "dd.MM.yyyy", timezone = "UTC")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate releaseDate;
 
     public ReleaseDTO(Release release) {
