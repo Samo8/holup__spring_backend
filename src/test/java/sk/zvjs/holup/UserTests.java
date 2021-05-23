@@ -1,5 +1,6 @@
 package sk.zvjs.holup;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import sk.zvjs.holup.user.*;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,23 +27,25 @@ public class UserTests {
     @Test
     @Transactional
     public void createUser() {
-        UserController userController = new UserController(userService);
-//        User createdUser =  userController.createUser(new User(UUID.randomUUID(), "test@test.com", "heslo"));
-//        assertNotNull(createdUser);
-//        assertEquals("test@test.com", createdUser.getEmail());
-//        assertTrue(passwordEncoder.matches("heslo", createdUser.getPassword()));
+        var createdUser = userService.createNewUser(new User(UUID.randomUUID(),99999L, "heslo"));
+        assertNotNull(createdUser);
+        assertEquals(99999L, createdUser.getConvictedNumber());
+        assertNotNull(createdUser.getId());
+        assertTrue(passwordEncoder.matches("heslo", createdUser.getPassword()));
     }
 
     @Test
-    public void findUserByEmail() {
-        Optional<User> user = userService.findByConvictedNumber(1000L);
+    public void findUserByConvictedNumber() {
+        createUser();
+        var user = userService.findByConvictedNumber(99999L);
+        assertTrue(user.isPresent());
         assertNotNull(user.get());
         assertTrue(passwordEncoder.matches("heslo", user.get().getPassword()));
     }
 
-//    @AfterEach
-//    public void removeCreatedUser() {
-//        Optional<User> createdUser = userService.findByEmail("test@test.com");
-//        createdUser.ifPresent(user -> userRepository.delete(user));
-//    }
+    @AfterEach
+    public void removeCreatedUser() {
+        var createdUser = userService.findByConvictedNumber(99999L);
+        createdUser.ifPresent(user -> userRepository.delete(user));
+    }
 }
