@@ -14,10 +14,6 @@ public class CalendarEventService {
         this.calendarEventRepository = calendarEventRepository;
     }
 
-    public Optional<CalendarEvent> fetchCalendarEventById(Long id) {
-        return calendarEventRepository.findById(id);
-    }
-
     public List<CalendarEvent> fetchCalendarEventsByUser(User user) {
         return calendarEventRepository.findCalendarEventsByUserIdAndImported(user.getId(), false);
     }

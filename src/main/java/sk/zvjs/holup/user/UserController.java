@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,22 +18,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/v1/users")
-    public List<UserResponseDTO> fetchAllUsers() {
-        List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
-        for (var user : userService.fetchAllUsers()) {
-            userResponseDTOS.add(new UserResponseDTO(user));
-        }
-        return userResponseDTOS;
-    }
-
     @GetMapping("/api/v1/user/{id}")
     public UserResponseDTO fetchUserById(@PathVariable UUID id) {
         Optional<User> user = userService.fetchUserById(id);
         if (user.isPresent()) {
             return new UserResponseDTO(user.get());
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " id not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Používateľ s id:" + id + " nebol nájdený");
     }
 
     @PostMapping("/api/v1/auth")
