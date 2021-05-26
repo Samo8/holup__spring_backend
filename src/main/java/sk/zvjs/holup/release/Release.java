@@ -8,7 +8,6 @@ import sk.zvjs.holup.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

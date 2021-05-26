@@ -1,8 +1,8 @@
 package sk.zvjs.holup.address.convert;
 
 
-import com.fasterxml.jackson.annotation.*;
-import sk.zvjs.holup.address.convert.Result;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @lombok.Data
 @JsonIgnoreProperties(ignoreUnknown = true)

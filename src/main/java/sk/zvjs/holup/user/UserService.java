@@ -1,29 +1,21 @@
 package sk.zvjs.holup.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
     private final UserRepository repository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
-    }
-
-    public List<User> fetchAllUsers() {
-        List<User> users = new ArrayList<>();
-        repository.findAll().forEach(users::add);
-        return users;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<User> fetchUserById(UUID id) {
@@ -49,16 +41,11 @@ public class UserService {
                 return new UserResponseDTO(user.get().getId(), user.get().getConvictedNumber(), user.get().getApiKey());
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nepsrávne číslo odsúdeného alebo heslo");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nesprávne číslo odsúdeného alebo heslo");
     }
 
     public User createNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
-    }
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
 }

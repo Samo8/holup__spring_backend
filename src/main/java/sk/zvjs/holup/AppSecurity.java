@@ -1,6 +1,5 @@
 package sk.zvjs.holup;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,8 +13,11 @@ import sk.zvjs.holup.user.UserService;
 @EnableWebSecurity
 @Order(1)
 public class AppSecurity extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public AppSecurity(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

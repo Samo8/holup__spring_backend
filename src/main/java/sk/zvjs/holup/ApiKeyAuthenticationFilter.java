@@ -46,9 +46,7 @@ class ApiKeyAuthenticationFilter implements Filter {
                 }
             }
         }
-
         chain.doFilter(request, response);
-
     }
 
     private void invalidAPIKey(ServletResponse response) throws IOException {
@@ -67,7 +65,6 @@ class ApiKeyAuthenticationFilter implements Filter {
                 apiKey = authHeader.substring(AUTH_METHOD.length()).trim();
             }
         }
-
         return apiKey;
     }
 }
