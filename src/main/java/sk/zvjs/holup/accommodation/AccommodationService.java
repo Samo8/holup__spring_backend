@@ -72,7 +72,7 @@ public class AccommodationService {
         return Math.sqrt(distance);
     }
 
-    @Scheduled(fixedDelay = 43200000)
+
     public void saveAccommodationsToDatabase() throws IOException {
         var accommodationsString = fetchDataFromAPI(ACCOMMODATIONS_URL);
         var welcome = Converter.fromJsonString(accommodationsString);
@@ -84,6 +84,15 @@ public class AccommodationService {
             accommodations.add(accommodation);
         }
         accommodationRepository.saveAll(accommodations);
+    }
+
+    @Scheduled(fixedDelay = 43200000)
+    private void checkAccommodationsEveryTwelveHours() {
+        try {
+            saveAccommodationsToDatabase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Accommodation createAccommodationAndAddLocationParams(Attributes attributes) throws IOException {
