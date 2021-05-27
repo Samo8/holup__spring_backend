@@ -1,6 +1,7 @@
 package sk.zvjs.holup.accommodation;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sk.zvjs.holup.accommodation.convert.Attributes;
 import sk.zvjs.holup.accommodation.convert.Converter;
@@ -71,6 +72,7 @@ public class AccommodationService {
         return Math.sqrt(distance);
     }
 
+    @Scheduled(fixedDelay = 43200000)
     public void saveAccommodationsToDatabase() throws IOException {
         var accommodationsString = fetchDataFromAPI(ACCOMMODATIONS_URL);
         var welcome = Converter.fromJsonString(accommodationsString);
